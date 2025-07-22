@@ -34,14 +34,14 @@ interface Message {
 }
 
 const formSchema = z.object({
-  message: z.string().min(1, "Message cannot be empty."),
+  message: z.string().min(1, "El mensaje no puede estar vacío."),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [topic, setTopic] = useState<string>("Cloud Computing");
+  const [topic, setTopic] = useState<string>("Computación en la nube");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
@@ -60,7 +60,7 @@ export function Chat() {
       {
         id: "init",
         role: "assistant",
-        content: `Hello! I'm Gemini Tutor. Ask me anything about "${topic}". You can change the topic at any time.`,
+        content: `¡Hola! Soy Gemini Tutor. Pregúntame lo que quieras sobre "${topic}". Puedes cambiar el tema en cualquier momento.`,
       },
     ]);
   }, []);
@@ -75,7 +75,7 @@ export function Chat() {
       {
         id: `topic-change-${Date.now()}`,
         role: "assistant",
-        content: `Topic changed to "${newTopic}". How can I help you?`,
+        content: `Tema cambiado a "${newTopic}". ¿Cómo puedo ayudarte?`,
       },
     ]);
   };
@@ -109,8 +109,8 @@ export function Chat() {
       console.error("Error calling Gemini API:", error);
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem communicating with the AI. Please try again later.",
+        title: "¡Uy! Algo salió mal.",
+        description: "Hubo un problema al comunicarse con la IA. Por favor, inténtalo de nuevo más tarde.",
       });
       setMessages((prev) => prev.slice(0, prev.length - 1));
     } finally {
@@ -128,10 +128,10 @@ export function Chat() {
     <Card className="w-full max-w-2xl h-[90vh] flex flex-col shadow-2xl">
       <CardHeader className="border-b">
         <CardTitle className="text-2xl font-bold tracking-tight text-primary">Gemini Tutor</CardTitle>
-        <CardDescription>An AI-powered chatbot to answer your questions.</CardDescription>
+        <CardDescription>Un chatbot impulsado por IA para responder a tus preguntas.</CardDescription>
         <div className="flex items-center gap-2 pt-2">
-          <Label htmlFor="topic-input" className="whitespace-nowrap">Current Topic:</Label>
-          <Input id="topic-input" defaultValue={topic} onBlur={(e) => handleTopicChange(e.target.value)} placeholder="e.g., World History" />
+          <Label htmlFor="topic-input" className="whitespace-nowrap">Tema actual:</Label>
+          <Input id="topic-input" defaultValue={topic} onBlur={(e) => handleTopicChange(e.target.value)} placeholder="Ej: Historia Mundial" />
         </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-hidden p-0">
@@ -149,10 +149,10 @@ export function Chat() {
                     {message.role === "assistant" && (message.correctness !== undefined || message.usefulness !== undefined) && (
                       <div className="mt-3 pt-2 border-t border-border/50 flex flex-wrap gap-2">
                         {message.correctness !== undefined && (
-                          <Badge className={cn("text-white", getScoreBadgeClass(message.correctness))}>Correctness: {(message.correctness * 100).toFixed(0)}%</Badge>
+                          <Badge className={cn("text-white", getScoreBadgeClass(message.correctness))}>Exactitud: {(message.correctness * 100).toFixed(0)}%</Badge>
                         )}
                         {message.usefulness !== undefined && (
-                          <Badge className={cn("text-white", getScoreBadgeClass(message.usefulness))}>Usefulness: {(message.usefulness * 100).toFixed(0)}%</Badge>
+                          <Badge className={cn("text-white", getScoreBadgeClass(message.usefulness))}>Utilidad: {(message.usefulness * 100).toFixed(0)}%</Badge>
                         )}
                       </div>
                     )}
@@ -171,7 +171,7 @@ export function Chat() {
                   </Avatar>
                   <div className="max-w-[75%] rounded-2xl p-4 shadow-md bg-secondary text-secondary-foreground rounded-bl-none flex items-center gap-2">
                     <Loader2 className="h-5 w-5 animate-spin" />
-                    <span className="text-sm">Thinking...</span>
+                    <span className="text-sm">Pensando...</span>
                   </div>
                 </div>
               )}
@@ -184,7 +184,7 @@ export function Chat() {
           <div className="flex-1">
             <Textarea
               {...register("message")}
-              placeholder="Type your question here..."
+              placeholder="Escribe tu pregunta aquí..."
               className="resize-none"
               rows={1}
               onKeyDown={(e) => {
@@ -198,7 +198,7 @@ export function Chat() {
             {errors.message && <p className="text-destructive text-xs mt-1 px-1">{errors.message.message}</p>}
           </div>
           <Button type="submit" disabled={isLoading} className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold">
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Send"}
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enviar"}
           </Button>
         </form>
       </CardFooter>

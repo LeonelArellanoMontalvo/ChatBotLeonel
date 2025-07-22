@@ -32,13 +32,13 @@ const answerQuestionPrompt = ai.definePrompt({
   name: 'answerQuestionPrompt',
   input: {schema: AnswerQuestionsInputSchema},
   output: {schema: AnswerQuestionsOutputSchema},
-  prompt: `You are an expert in the topic of {{topic}}. Please answer the following question about the topic:
+  prompt: `Eres un experto en el tema de {{topic}}. Por favor, responde la siguiente pregunta sobre el tema:
 
-Question: {{{question}}}
+Pregunta: {{{question}}}
 
-After answering the question, please evaluate the correctness and usefulness of your answer on a scale of 0 to 1, with 1 being the most correct/useful. Return a JSON object with the answer, correctness and usefulness.
+Después de responder la pregunta, evalúa la exactitud y utilidad de tu respuesta en una escala de 0 a 1, donde 1 es lo más correcto/útil. Devuelve un objeto JSON con la respuesta, la exactitud y la utilidad.
 
-Here is the answer in JSON:
+Aquí está la respuesta en JSON:
 `,
   config: {
     safetySettings: [
