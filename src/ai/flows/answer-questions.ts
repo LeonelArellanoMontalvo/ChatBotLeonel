@@ -19,8 +19,6 @@ export type AnswerQuestionsInput = z.infer<typeof AnswerQuestionsInputSchema>;
 
 const AnswerQuestionsOutputSchema = z.object({
   answer: z.string().describe('The answer to the question about the topic.'),
-  correctness: z.number().describe('The level of correctness of the answer (0-1).'),
-  usefulness: z.number().describe('The level of usefulness of the answer (0-1).'),
 });
 export type AnswerQuestionsOutput = z.infer<typeof AnswerQuestionsOutputSchema>;
 
@@ -36,7 +34,7 @@ const answerQuestionPrompt = ai.definePrompt({
 
 Pregunta: {{{question}}}
 
-Después de responder la pregunta, evalúa la exactitud y utilidad de tu respuesta en una escala de 0 a 1, donde 1 es lo más correcto/útil. Devuelve un objeto JSON con la respuesta, la exactitud y la utilidad.
+Devuelve un objeto JSON con la respuesta.
 
 Aquí está la respuesta en JSON:
 `,

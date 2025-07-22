@@ -21,7 +21,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
@@ -29,8 +28,6 @@ interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
-  correctness?: number;
-  usefulness?: number;
 }
 
 const formSchema = z.object({
@@ -60,7 +57,7 @@ export function Chat() {
       {
         id: "init",
         role: "assistant",
-        content: `¡Hola! Soy Gemini Tutor. Pregúntame lo que quieras sobre "${topic}". Puedes cambiar el tema en cualquier momento.`,
+        content: `¡Hola! Soy Chatbot Leonel. Pregúntame lo que quieras sobre "${topic}". Puedes cambiar el tema en cualquier momento.`,
       },
     ]);
   }, []);
@@ -101,8 +98,6 @@ export function Chat() {
         id: `assistant-${Date.now()}`,
         role: "assistant",
         content: response.answer,
-        correctness: response.correctness,
-        usefulness: response.usefulness,
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
@@ -117,17 +112,11 @@ export function Chat() {
       setIsLoading(false);
     }
   };
-
-  const getScoreBadgeClass = (score: number) => {
-    if (score >= 0.8) return "bg-green-600 hover:bg-green-700";
-    if (score >= 0.5) return "bg-yellow-500 hover:bg-yellow-600";
-    return "bg-red-600 hover:bg-red-700";
-  };
   
   return (
     <Card className="w-full max-w-2xl h-[90vh] flex flex-col shadow-2xl">
       <CardHeader className="border-b">
-        <CardTitle className="text-2xl font-bold tracking-tight text-primary">Gemini Tutor</CardTitle>
+        <CardTitle className="text-2xl font-bold tracking-tight text-primary">Chatbot Leonel</CardTitle>
         <CardDescription>Un chatbot impulsado por IA para responder a tus preguntas.</CardDescription>
         <div className="flex items-center gap-2 pt-2">
           <Label htmlFor="topic-input" className="whitespace-nowrap">Tema actual:</Label>
@@ -146,16 +135,6 @@ export function Chat() {
                   )}
                   <div className={cn("max-w-[80%] rounded-2xl p-4 shadow-md", message.role === "user" ? "bg-primary text-primary-foreground rounded-br-none" : "bg-secondary text-secondary-foreground rounded-bl-none")}>
                     <p className="whitespace-pre-wrap text-sm">{message.content}</p>
-                    {message.role === "assistant" && (message.correctness !== undefined || message.usefulness !== undefined) && (
-                      <div className="mt-3 pt-2 border-t border-border/50 flex flex-wrap gap-2">
-                        {message.correctness !== undefined && (
-                          <Badge className={cn("text-white", getScoreBadgeClass(message.correctness))}>Exactitud: {(message.correctness * 100).toFixed(0)}%</Badge>
-                        )}
-                        {message.usefulness !== undefined && (
-                          <Badge className={cn("text-white", getScoreBadgeClass(message.usefulness))}>Utilidad: {(message.usefulness * 100).toFixed(0)}%</Badge>
-                        )}
-                      </div>
-                    )}
                   </div>
                   {message.role === "user" && (
                     <Avatar className="h-8 w-8 border-2 border-accent">

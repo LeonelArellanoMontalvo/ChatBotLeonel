@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Gemini Tutor',
-  description: 'An AI-powered chatbot using the Gemini API.',
+  title: 'Chatbot Leonel',
+  description: 'Un chatbot impulsado por IA para responder a tus preguntas.',
 };
 
 export default function RootLayout({
