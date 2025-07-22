@@ -67,7 +67,22 @@ const answerQuestionsFlow = ai.defineFlow(
     outputSchema: AnswerQuestionsOutputSchema,
   },
   async input => {
-    const {output} = await answerQuestionPrompt(input);
-    return output!;
+    const maxRetries = 3;
+    const delayMs = 1000;
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const {output} = await answerQuestionPrompt(input);
+        return output!;
+      } catch (error: any) {
+        if (i === maxRetries - 1) {
+          // Si es el último intento, lanza el error
+          throw error;
+        }
+        // Espera antes de volver a intentar
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      }
+    }
+    // Esto no debería suceder, pero TypeScript lo necesita
+    throw new Error('No se pudo obtener una respuesta de la API después de varios intentos.');
   }
 );
