@@ -1,0 +1,18 @@
+# render.yaml
+# Instrucciones para desplegar en Render: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: chatbot-leonel
+    runtime: node
+    plan: free # Puedes cambiar esto al plan que prefieras en Render
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    envVars:
+      - key: GEMINI_API_KEY
+        # ¡Importante! Debes reemplazar esto con tu propia clave de API en el dashboard de Render.
+        # 1. Obtén tu clave desde Google AI Studio: https://aistudio.google.com/
+        # 2. En Render, ve a Environment y añade una variable llamada GEMINI_API_KEY.
+        value: "PEGA_AQUI_TU_CLAVE_DE_API_DE_GEMINI"
+      - key: NODE_VERSION
+        value: "20"
