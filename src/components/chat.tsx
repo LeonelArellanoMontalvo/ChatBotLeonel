@@ -6,7 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { answerQuestions } from "@/ai/flows/answer-questions";
 import { useToast } from "@/hooks/use-toast";
-import { Bot, User, Loader2 } from "lucide-react";
+import { User, Loader2, Sparkles, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+
 
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +44,7 @@ export function Chat() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const { theme, setTheme } = useTheme();
 
   const {
     register,
@@ -116,7 +119,18 @@ export function Chat() {
   return (
     <Card className="w-full max-w-2xl h-[90vh] flex flex-col shadow-2xl">
       <CardHeader className="border-b">
-        <CardTitle className="text-2xl font-bold tracking-tight text-primary">Chatbot Leonel</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-2xl font-bold tracking-tight text-primary">Chatbot Leonel</CardTitle>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            aria-label="Toggle theme"
+          >
+            <Sun className="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-6 w-6 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          </Button>
+        </div>
         <CardDescription>Un chatbot impulsado por IA para responder a tus preguntas.</CardDescription>
         <div className="flex items-center gap-2 pt-2">
           <Label htmlFor="topic-input" className="whitespace-nowrap">Tema actual:</Label>
@@ -130,15 +144,15 @@ export function Chat() {
                 <div key={message.id} className={cn("flex items-start gap-4", message.role === "user" ? "justify-end" : "justify-start")}>
                   {message.role === "assistant" && (
                     <Avatar className="h-8 w-8 border-2 border-primary">
-                      <AvatarFallback><Bot className="h-5 w-5 text-primary" /></AvatarFallback>
+                      <AvatarFallback><Sparkles className="h-5 w-5 text-primary" /></AvatarFallback>
                     </Avatar>
                   )}
                   <div className={cn("max-w-[80%] rounded-2xl p-4 shadow-md", message.role === "user" ? "bg-primary text-primary-foreground rounded-br-none" : "bg-secondary text-secondary-foreground rounded-bl-none")}>
                     <p className="whitespace-pre-wrap text-sm">{message.content}</p>
                   </div>
                   {message.role === "user" && (
-                    <Avatar className="h-8 w-8 border-2 border-accent">
-                      <AvatarFallback><User className="h-5 w-5 text-accent" /></AvatarFallback>
+                    <Avatar className="h-8 w-8 border-2 border-primary">
+                      <AvatarFallback><User className="h-5 w-5 text-primary" /></AvatarFallback>
                     </Avatar>
                   )}
                 </div>
@@ -146,7 +160,7 @@ export function Chat() {
               {isLoading && (
                 <div className="flex items-start gap-4 justify-start">
                   <Avatar className="h-8 w-8 border-2 border-primary">
-                    <AvatarFallback><Bot className="h-5 w-5 text-primary" /></AvatarFallback>
+                      <AvatarFallback><Sparkles className="h-5 w-5 text-primary" /></AvatarFallback>
                   </Avatar>
                   <div className="max-w-[75%] rounded-2xl p-4 shadow-md bg-secondary text-secondary-foreground rounded-bl-none flex items-center gap-2">
                     <Loader2 className="h-5 w-5 animate-spin" />
@@ -176,7 +190,7 @@ export function Chat() {
             />
             {errors.message && <p className="text-destructive text-xs mt-1 px-1">{errors.message.message}</p>}
           </div>
-          <Button type="submit" disabled={isLoading} className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold">
+          <Button type="submit" disabled={isLoading}>
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enviar"}
           </Button>
         </form>
